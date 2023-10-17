@@ -1,0 +1,52 @@
+version: '3.4'
+
+services:
+  whisparr:
+    image: ghcr.io/hotio/whisparr
+    container_name: whisparr
+    environment:
+      - PUID=501
+      - PGID=20
+      - TZ=America/Los_Angeles
+    volumes:
+      - /Volumes/Dracula:/media
+      - /Users/ky/DockerConfigs/whisparr:/config
+    ports:
+      - 6969:6969
+    restart: unless-stopped
+
+  nzbget:
+    image: linuxserver/nzbget:latest
+    container_name: nzbget
+    environment:
+      - PUID=501
+      - PGID=20
+      - TZ=America/Los_Angeles
+    volumes:
+      - /Volumes/Dracula:/downloads
+      - /Volumes/Vampire:/intermediate
+      - /Users/ky/DockerConfigs/nzbget:/config
+    ports:
+      - 6789:6789
+    restart: unless-stopped
+
+  qbittorrent:
+    image: linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=501
+      - PGID=20
+      - TZ=America/Los_Angeles
+    volumes:
+      - /Volumes/Dracula:/downloads
+      - /Users/ky/DockerConfigs/qbittorrent:/config
+    ports:
+      - 8080:8080
+      - 6881:6881
+    restart: unless-stopped
+
+networks:
+  default:
+    name: my-net
+    external: true
+
